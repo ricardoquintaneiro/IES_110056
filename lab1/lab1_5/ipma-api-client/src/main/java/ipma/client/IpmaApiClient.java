@@ -9,10 +9,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * demonstrates the use of the IPMA API for weather forecast
  */
 public class IpmaApiClient {
-    public static void  main(String[] args ) {
+    public static String maxTemp (int cityCode) {
 
         //todo: should generalize for a city passed as argument
-        final int CITY_ID = Integer.parseInt(args[0]);
+        final int CITY_ID = cityCode;
 
         // get a retrofit instance, loaded with the GSon lib to convert JSON into objects
         Retrofit retrofit = new Retrofit.Builder()
@@ -32,15 +32,15 @@ public class IpmaApiClient {
             if (forecast != null) {
                 CityForecast firstDay = forecast.getData().listIterator().next();
 
-                System.out.printf( "max temp for %s is %4.1f %n",
+                return String.format("max temp for %s is %4.1f %n",
                         firstDay.getForecastDate(),
                         Double.parseDouble(firstDay.getTMax()));
                     } else {
-                System.out.println( "No results for this request!");
+                return "No results for this request!";
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+            return "Error retrieving city information!";
         }
-
     }
 }

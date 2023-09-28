@@ -1,54 +1,47 @@
 package weather.forecast;
 
-
-
-import ipma.client.CityForecast;
-import ipma.client.IpmaCityForecast; //may need to adapt package name
-import ipma.client.IpmaService;
+import ipma.client.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- * demonstrates the use of the IPMA API for weather forecast
- */
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class AnyCityForecast {
 
     private static final Logger logger = LogManager.getLogger(AnyCityForecast.class);
 
-    public static void  main(String[] args ) {
+    class MyTimerTask extends TimerTask {
+        public void run() {
+            int CITY_ID = (int) (Math.random() * 5000) + 1000000;
+            String result = ipma.client.IpmaApiClient.maxTemp(CITY_ID);
+            logger.info(result);
+        }
+    }
 
-        //todo: should generalize for a city passed as argument
-        final int CITY_ID = Integer.parseInt(args[0]);
+    public static void main(String[] args) {
 
-        // get a retrofit instance, loaded with the GSon lib to convert JSON into objects
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.ipma.pt/open-data/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        AnyCityForecast app = new AnyCityForecast();
+        MyTimerTask myTask = app.new MyTimerTask();
+        Timer myTimer = new Timer();
 
-        // create a typed interface to use the remote API (a client)
-        IpmaService service = retrofit.create(IpmaService.class);
-        // prepare the call to remote endpoint
-        Call<IpmaCityForecast> callSync = service.getForecastForACity(CITY_ID);
+        /*
+         * Set an initial delay of 1 second, then repeat every half second.
+         */
 
-        try {
-            Response<IpmaCityForecast> apiResponse = callSync.execute();
-            IpmaCityForecast forecast = apiResponse.body();
+        // execute next line 100 times with 5 second interval
+        myTimer.schedule(myTask, 1000, 1000);
 
-            if (forecast != null) {
-                CityForecast firstDay = forecast.getData().listIterator().next();
-
-                System.out.printf( "max temp for %s is %4.1f %n",
-                        firstDay.getForecastDate(),
-                        Double.parseDouble(firstDay.getTMax()));
-                    } else {
-                logger.debug("No results for request " + args[0]);
-                System.out.println( "No results for this request!");
+        while (true) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                break;
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
 
+        myTimer.cancel();
     }
 }
