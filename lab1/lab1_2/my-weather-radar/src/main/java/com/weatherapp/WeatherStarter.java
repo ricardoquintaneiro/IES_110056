@@ -9,10 +9,15 @@ import com.weatherapp.ipma_client.CityForecast;
 import com.weatherapp.ipma_client.IpmaCityForecast; //may need to adapt package name
 import com.weatherapp.ipma_client.IpmaService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * demonstrates the use of the IPMA API for weather forecast
  */
 public class WeatherStarter {
+
+    private static final Logger logger = LogManager.getLogger(WeatherStarter.class);
 
     public static void  main(String[] args ) {
 
@@ -40,7 +45,8 @@ public class WeatherStarter {
                 System.out.printf( "max temp for %s is %4.1f %n",
                         firstDay.getForecastDate(),
                         Double.parseDouble(firstDay.getTMax()));
-            } else {
+                    } else {
+                logger.debug("No results for request " + args[0]);
                 System.out.println( "No results for this request!");
             }
         } catch (Exception ex) {

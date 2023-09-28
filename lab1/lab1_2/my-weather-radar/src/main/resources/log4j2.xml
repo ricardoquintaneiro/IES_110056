@@ -9,8 +9,10 @@
             <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %m%nw</Pattern>
         </PatternLayout>
     </File>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="fout"/>
+        </Root>
+    </Loggers>
 </Configuration>
-<Root level="error">
-    <AppenderRef ref="STDOUT"/>
-    <AppenderRef ref="fout"/>
-</Root>
