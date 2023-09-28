@@ -39,6 +39,21 @@ Docker composer:
     https://docs.docker.com/compose/gettingstarted/
 
 
+Dockerize :
+
+    Make sure we have runnable uber-jar (Maven Shade)
+
+    Make dockerfile, example:
+
+    FROM openjdk:11
+    MAINTAINER baeldung.com
+    COPY target/docker-java-jar-0.0.1-SNAPSHOT.jar app.jar
+    ENTRYPOINT ["java","-jar","/app.jar"]
+
+    mvn package
+    docker image build -t docker-java-jar:latest .
+    docker run docker-java-jar:latest
+
 
 Notas da aula prática:
 
@@ -47,6 +62,6 @@ Notas da aula prática:
     wildfly
     undertow.io
 
-    O professor da prática diz para usar java -jar para executar a aplicação, temos que garantir que o package está atualizado
+    O professor diz para usar java -jar para executar a aplicação, temos que garantir que o package está atualizado.
 
-    Porto 8080 é frequentemente usado para servidores, mas depois pode ser redirecionado para outro porto. Assim ficam todos os servidores a usar a 8080.
+    Porto 8080 é frequentemente usado para servidores, mas depois pode ser redirecionado para outro porto.
