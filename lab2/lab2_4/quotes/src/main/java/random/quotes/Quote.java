@@ -1,3 +1,3 @@
 package random.quotes;
 
-public record Quote(String content) { }
+public record Quote(Integer showId, String quote) { }
