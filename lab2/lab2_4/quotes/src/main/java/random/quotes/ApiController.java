@@ -15,21 +15,21 @@ public class ApiController {
 	@GetMapping("/api/quote")
 	public Quote quote() {
 		Map<Integer, String> quoteMap = quoteService.getRandomQuote();
-		int key = quoteMap.keySet().iterator().next();
-		String quote = quoteMap.get(key);
-		return new Quote(key, quote);
+		int showId = quoteMap.keySet().iterator().next();
+		String showName = quoteService.getShowName(showId);
+		String quote = quoteMap.get(showId);
+		return new Quote(showId, showName, quote);
 	}
 
 	@GetMapping("/api/shows")
 	public Shows shows() {
-		Map<Integer, String> shows = quoteService.getShows();
-		return new Shows(shows);
+		return new Shows(quoteService.getShows());
 	}
 
 	@GetMapping("/api/quotes")
-	public ShowQuotes quotes(@RequestParam(value = "show", defaultValue = "0") String show) {
-		int showId = Integer.parseInt(show);
-		List<String> quotes = quoteService.getQuotes(showId);
-		return new ShowQuotes(showId, quotes);
+	public ShowQuotes quotes(@RequestParam(value = "show", defaultValue = "0") int showId) {
+		String showName = quoteService.getShowName(showId);
+		List<String> showQuotes = quoteService.getQuotes(showId);
+		return new ShowQuotes(showId, showName, showQuotes);
 	}
 }
