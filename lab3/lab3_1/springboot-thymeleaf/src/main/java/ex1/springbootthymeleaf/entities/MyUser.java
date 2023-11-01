@@ -19,12 +19,12 @@ public class MyUser {
     @NotBlank(message = "Email is mandatory")
     private String email;
 
-    private int phone;
+    private String phone;
 
     public MyUser() {}
 
     public MyUser(long id, @NotBlank(message = "Name is mandatory") String name,
-            @NotBlank(message = "Email is mandatory") String email, int phone) {
+            @NotBlank(message = "Email is mandatory") String email, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -55,17 +55,12 @@ public class MyUser {
         this.email = email;
     }
      
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    @Override
-    public String toString() {
-        return "MyUser [id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + "]";
     }
 
 }
