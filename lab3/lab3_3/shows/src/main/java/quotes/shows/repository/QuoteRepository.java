@@ -9,13 +9,9 @@ import quotes.shows.entity.Quote;
 
 public interface QuoteRepository extends JpaRepository<Quote, Long> {
 
-    Quote getQuoteFromMovie(int movieId);
+    List<Quote> findByMovieId(Long movieId);
 
-    List<Quote> getQuotes(int movieId);
-
-    Quote getRandomQuote();
-
-    Movie getMovieFromQuote(int quoteId);
+    // Movie getMovieFromQuote(Long quoteId);
      
 }
 

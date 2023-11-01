@@ -13,14 +13,15 @@ import lombok.Setter;
 @Entity
 @Table(name = "quotes")
 public class Quote {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = Movie.class)
-    @JoinTable(name = "movie")
+    @JoinColumns({ @JoinColumn(name = "movie_id", referencedColumnName = "id"),
+            @JoinColumn(name = "title", referencedColumnName = "title"),
+            @JoinColumn(name = "year", referencedColumnName = "year") })
     private Movie movie;
     @Column(nullable = false)
     private String quote;
 }
-

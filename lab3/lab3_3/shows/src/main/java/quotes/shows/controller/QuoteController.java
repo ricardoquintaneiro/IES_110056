@@ -1,6 +1,7 @@
 package quotes.shows.controller;
 
 import lombok.AllArgsConstructor;
+import quotes.shows.entity.Movie;
 import quotes.shows.entity.Quote;
 import quotes.shows.service.QuoteService;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -59,16 +61,31 @@ public class QuoteController {
     // GET quote by title REST API
     // GET http://localhost:8080/quotes?movie_id={movie_id}
     @GetMapping(params = "movie_id")
-    public ResponseEntity<List<Quote>> getQuotesFromMovie(@RequestParam int movie_id) { 
+    public ResponseEntity<List<Quote>> getQuotesFromMovie(@RequestParam Long movie_id) { 
         List<Quote> quotes = quoteService.getQuotes(movie_id);
         return new ResponseEntity<>(quotes, HttpStatus.OK);
     }
 
+    // GET quote by title REST API
+    // GET http://localhost:8080/quotes/random
+    @GetMapping("random")
+    public ResponseEntity<Optional<Quote>> getRandomQuote() { 
+        Optional<Quote> quote = quoteService.getRandomQuote();
+        return new ResponseEntity<>(quote, HttpStatus.OK);
+    }
+     
+    // GET quote by title REST API
+    // GET http://localhost:8080/quotes/random?={movie_id}
+    @GetMapping(value = "random", params = "{movie_id}")
+    public ResponseEntity<Quote> getQuoteFromMovie(@RequestParam Long movie_id) { 
+        Quote quote = quoteService.getQuoteFromMovie(movie_id);
+        return new ResponseEntity<>(quote, HttpStatus.OK);
+    }
     // GET quotes by year REST API
-    // GET http://localhost:8080/quotes?year={year}
-    @GetMapping(params = "year")
-    public ResponseEntity<List<Quote>> getQuotesFromYear(@RequestParam String year){
-        List<Quote> quotes = quoteService.getQuotesFromYear(year);
-        return new ResponseEntity<>(quotes, HttpStatus.OK);
+    // GET http://localhost:8080/quotes/{quote_id}/movie
+    @GetMapping(value = "{quote_id}/movie")
+    public ResponseEntity<Movie> getMovieFromQuote(@PathVariable("quote_id") Long quote_id){
+        Movie movie = quoteService.getMovieFromQuote(quote_id);
+        return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 }

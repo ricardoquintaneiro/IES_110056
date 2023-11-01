@@ -7,8 +7,10 @@ import quotes.shows.repository.QuoteRepository;
 import quotes.shows.service.QuoteService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -28,8 +30,9 @@ public class QuoteServiceImpl implements QuoteService {
     }
 
     @Override
-    public Quote getQuoteFromMovie(int movieId) {
-        Quote quote = quoteRepository.getQuoteFromMovie(movieId);
+    public Quote getQuoteFromMovie(Long movieId) {
+        List<Quote> quotes = quoteRepository.findByMovieId(movieId);
+        Quote quote = quotes.get(new Random().nextInt(quotes.size()));
         return quote;
     }
 
@@ -39,14 +42,18 @@ public class QuoteServiceImpl implements QuoteService {
     }
 
     @Override
-    public List<Quote> getQuotes(int movieId) {
-        List<Quote> quotes = quoteRepository.getQuotes(movieId);
+    public List<Quote> getQuotes(Long movieId) {
+        List<Quote> quotes = quoteRepository.findByMovieId(movieId);
         return quotes;
     }
 
     @Override
-    public Quote getRandomQuote() {
-        Quote quote = quoteRepository.getRandomQuote();
+    public Optional<Quote> getRandomQuote() {
+        List<Long> ids = new ArrayList<>();
+        quoteRepository.findAll().iterator().forEachRemaining(quote -> ids.add(quote.getId()));
+        Optional<Quote> quote = Optional.empty();
+        if (!ids.isEmpty())
+            quote = quoteRepository.findById(ids.get(new Random().nextInt(ids.size())));
         return quote;
     }
 
@@ -65,8 +72,9 @@ public class QuoteServiceImpl implements QuoteService {
     }
 
     @Override
-    public Movie getMovieFromQuote(int quoteId) {
-        Movie movie = quoteRepository.getMovieFromQuote(quoteId);
+    public Movie getMovieFromQuote(Long quoteId) {
+        Quote quote = quoteRepository.findById(quoteId).get();
+        Movie movie = quote.getMovie();
         return movie;
     }
     
